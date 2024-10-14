@@ -76,7 +76,7 @@ public:
         temp->next = newNode;
     }
 
-    void delete_node(int value) {
+    void delete_val(int value) {
         if (!head) return; // Empty list
 
         Node* temp = head;
@@ -120,6 +120,96 @@ public:
         cout << endl;
     }
 
+    void delete_pos(unsigned int position)
+    {
+        if (!head)
+        {
+            cout << "List is empty. Cannot Delete Node at Position: " << position << endl;
+            return;
+        }
+
+        Node* traversalPtr = head;
+
+        for (int i = 0, i < position && temp; i++) // 
+        {
+            traversalPtr = traversalPtr->next;
+        }
+
+        // Check if Traversal is null
+        if (!traversalPtr)
+        {
+            cout << "Invalid Position" << endl;
+            return;
+        }
+
+        // Test Head and Tail cases
+        if (traversalPtr->prev)
+        {
+            traversalPtr->prev->next = traversalPtr->next;
+        } else // Head Case
+        {
+            head = traversalPtr->next;
+        }
+
+        if (traversalPtr->next)
+        {
+            traversalPtr->next->prev = traversalPtr->prev;
+        } else // Tail Case
+        {
+            tail = traversalPtr->prev;
+            traversalPtr->prev->next = nullptr;
+        }
+
+        // Finally delete the Node
+        delete traversalPtr;
+        traversalPtr = nullptr;
+
+    }
+
+    void pop_front()
+    {
+        // Test Case List is empty
+        if (!head)
+        {
+            cout << "Empty List. Can't pop the front." << endl;
+            return;
+        }
+
+        // Set Temp Equal to First Node
+        Chair* temp = head;
+
+        head = head->next; // Set Head to point to 2nd Heads Node
+        // Set New Head Previous to Nullptr
+        head->prev = nullptr;
+
+        // Delete Temp to pop that Head Node
+        delete temp;
+        temp = nullptr;
+    }
+
+    void pop_back()
+    {
+        // Test case if List is empty
+        if (!tail->prev && !head)
+        {
+            cout << "List is empty. Can't pop tail Node." << endl;
+            return;
+        }
+
+        // Create temp and set to Node to delete
+        Chair* temp = tail;
+        // Set Tail to new Tail
+        tail = tail->prev;
+        // Set New Tail Next to nullptr 
+        tail->next = nullptr;
+        // Delete Old Tail
+        delete temp;
+        temp = nullptr;
+
+    }
+
+
+
     ~DoublyLinkedList() {
         while (head) {
             Node* temp = head;
@@ -141,6 +231,18 @@ int main() {
 
     cout << "List backward: ";
     list.print_reverse();
+
+    cout << "List after Deleting Node in Position (3): " << endl;
+    list.delete_pos(3);
+    list.print();
+    
+    cout << "List After Popping the Head Node:" << endl;
+    list.pop_front();
+    list.print();
+
+    cout << "List after Popping the Tail Node:" << endl;
+    list.pop_back();
+    list.print();
 
     cout << "Deleting list, then trying to print.\n";
     list.~DoublyLinkedList();
